@@ -1,0 +1,21 @@
+store_id,store_name,city,state,region,opening_date,manager_name,store_type,is_active,created_at,updated_at
+1,RetailX Store 1,Sambalpur,Haryana,North,2018-10-17,Gagan Sami,Mall,True,2022-12-16 09:51:03.702606,2023-01-18 08:21:55.134452
+2,RetailX Store 2,Dibrugarh,Andhra Pradesh,South,2022-08-01,Oni Kannan,Mall,True,2016-11-18 01:13:33.257793,2017-10-15 09:17:28.958659
+3,RetailX Store 3,Kozhikode,Rajasthan,North,2023-07-18,Arunima Dugal,Mall,True,2021-01-20 15:49:09.823914,2022-08-03 07:08:54.455859
+4,RetailX Store 4,Tiruchirappalli,Bihar,East,2020-05-11,Hemangini Lalla,Outlet,True,2018-09-19 09:07:12.479960,2024-09-15 13:04:50.394082
+5,RetailX Store 5,Burhanpur,Gujarat,West,2017-05-07,Janaki Handa,Mall,True,2024-08-19 22:09:35.378555,2026-01-15 23:29:46.519432
+6,RetailX Store 6,Ramagundam,Telangana,South,2026-06-01,Harrison Rai,Mall,True,2023-08-11 08:18:31.284696,2023-09-29 19:00:03.085717
+7,RetailX Store 7,Ujjain,Karnataka,South,2020-04-06,Amara Bora,Outlet,True,2019-05-06 05:43:53.083140,2023-12-07 14:53:59.372115
+8,RetailX Store 8,Ujjain,Haryana,North,2021-03-08,Theodore Nair,Outlet,True,2022-08-27 18:11:40.352477,2023-04-29 01:51:21.617903
+9,RetailX Store 9,Patna,Telangana,South,2024-08-11,Amrita Bhatti,High Street,True,2024-12-28 09:36:32.325229,2026-03-18 19:10:52.293507
+10,RetailX Store 10,Rajpur Sonarpur,West Bengal,East,2023-02-12,Tara Dhar,Mall,True,2018-09-03 13:28:55.955830,2026-02-10 20:16:37.413259
+11,RetailX Store 11,Bhimavaram,Kerala,South,2020-11-05,Janaki Kanda,Outlet,True,2019-03-19 09:59:31.858151,2021-01-09 14:22:57.321664
+12,RetailX Store 12,Mysore,Andhra Pradesh,South,2024-02-13,Michael Dutta,Mall,True,2026-07-15 14:24:59.819986,2026-07-16 22:50:36.882850
+13,RetailX Store 13,Kharagpur,West Bengal,East,2020-05-18,Zayan Apte,High Street,True,2024-06-25 23:00:30.922499,2025-05-12 13:13:17.970349
+14,RetailX Store 14,Mau,Gujarat,West,2017-09-04,Nakul Setty,Mall,True,2023-05-14 15:14:36.826447,2023-09-25 09:37:24.313871
+15,RetailX Store 15,Orai,Maharashtra,West,2024-03-07,Chanchal Tripathi,Outlet,True,2016-08-05 19:42:32.834588,2023-10-17 15:08:52.153158
+16,RetailX Store 16,Panvel,Karnataka,South,2026-02-05,Ekiya Suresh,Outlet,True,2022-08-27 04:05:58.942186,2023-04-02 10:55:48.910536
+17,RetailX Store 17,Mathura,Tamil Nadu,South,2017-02-20,Frederick Sunder,High Street,True,2016-10-04 02:31:01.176097,2025-11-13 10:50:10.300626
+18,RetailX Store 18,Warangal,Andhra Pradesh,South,2023-02-28,Alka Wable,Outlet,True,2024-09-21 09:52:20.780388,2026-07-10 13:47:21.494541
+19,RetailX Store 19,Panvel,Odisha,East,2024-02-11,Devika Rastogi,High Street,True,2025-04-15 10:37:08.552046,2025-10-29 14:14:15.803451
+20,RetailX Store 20,Hazaribagh,Rajasthan,North,2021-01-28,Umang Bhatt,Mall,True,2026-07-07 15:38:12.287177,2026-07-19 03:57:43.592219

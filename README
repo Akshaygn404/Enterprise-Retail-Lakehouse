@@ -1,0 +1,337 @@
+# 🚀 Enterprise Retail Lakehouse Platform
+
+An end-to-end **Data Engineering** project that simulates a modern retail data platform using **PySpark**, **Delta Lake**, and the **Medallion Architecture (Bronze → Silver → Gold)**.
+
+The project demonstrates how raw operational data can be transformed into analytics-ready datasets using scalable ETL pipelines and dimensional data modeling.
+
+---
+
+## 📌 Project Overview
+
+Retail businesses generate data from multiple operational systems such as customer management, product catalogs, inventory systems, and order management systems.
+
+This project simulates those source systems and builds a complete **Lakehouse ETL pipeline** that:
+
+* Generates realistic retail datasets
+* Ingests raw data into a Bronze Layer
+* Cleans and validates data in a Silver Layer
+* Builds analytical Star Schema tables in the Gold Layer
+
+The final datasets are designed to support reporting and business intelligence tools.
+
+---
+
+# 🏗️ Architecture
+
+```text
+                Source Systems
+                       │
+                       ▼
+             Generated CSV Files
+                       │
+                       ▼
+            Bronze Layer (Delta Lake)
+             Raw Data Ingestion
+                       │
+                       ▼
+           Silver Layer (Delta Lake)
+      Data Cleaning & Validation
+                       │
+                       ▼
+            Gold Layer (Delta Lake)
+        Star Schema & Business Metrics
+                       │
+                       ▼
+          Analytics / Data Warehouse
+```
+
+---
+
+# 🛠️ Tech Stack
+
+| Category               | Technologies     |
+| ---------------------- | ---------------- |
+| Programming Language   | Python           |
+| Distributed Processing | PySpark          |
+| Storage Format         | Delta Lake       |
+| Data Processing        | Spark DataFrames |
+| Data Generation        | Faker, Pandas    |
+| Data Modeling          | Star Schema      |
+| Version Control        | Git, GitHub      |
+
+---
+
+# 📂 Project Structure
+
+```text
+enterprise-retail-lakehouse/
+
+├── data/
+│   ├── source/
+│   ├── bronze/
+│   ├── silver/
+│   └── gold/
+│
+├── src/
+│
+│   ├── generators/
+│   │   ├── customer_generator.py
+│   │   ├── product_generator.py
+│   │   ├── store_generator.py
+│   │   ├── order_generator.py
+│   │   ├── order_items_generator.py
+│   │   ├── inventory_generator.py
+│   │   └── returns_generator.py
+│
+│   ├── bronze/
+│   │   ├── bronze_ingestion.py
+│   │   └── load_bronze.py
+│
+│   ├── silver/
+│   │   ├── common_transformations.py
+│   │   ├── silver_transform.py
+│   │   └── load_silver.py
+│
+│   ├── gold/
+│   │   ├── gold_transform.py
+│   │   └── load_gold.py
+│
+│   ├── common/
+│   │   └── spark_session.py
+│
+│   └── config/
+│       └── config.py
+│
+├── requirements.txt
+└── README.md
+```
+
+---
+
+# 📊 Source Systems
+
+The project simulates seven operational retail systems.
+
+| Dataset     | Description                |
+| ----------- | -------------------------- |
+| Customers   | Customer master data       |
+| Products    | Product catalog            |
+| Stores      | Store information          |
+| Orders      | Customer orders            |
+| Order Items | Products within each order |
+| Inventory   | Stock availability         |
+| Returns     | Returned orders            |
+
+---
+
+# 🥉 Bronze Layer
+
+The Bronze Layer stores raw data exactly as received from the source systems.
+
+### Responsibilities
+
+* Read CSV files
+* Preserve raw data
+* Store data as Delta Tables
+* No transformations
+* No validation
+
+Output:
+
+```text
+bronze/
+    customers/
+    products/
+    stores/
+    orders/
+    order_items/
+    inventory_stock/
+    returns/
+```
+
+---
+
+# 🥈 Silver Layer
+
+The Silver Layer cleans, standardizes, and validates the Bronze data.
+
+### Common Transformations
+
+* Remove duplicate records
+* Trim whitespace
+* Standardize text
+* Convert data types
+* Apply business validations
+* Log validation metrics
+
+### Business Validations
+
+Examples include:
+
+* Product price validation
+* Order status validation
+* Quantity validation
+* Inventory validation
+* Customer validation
+
+---
+
+# 🥇 Gold Layer
+
+The Gold Layer contains analytics-ready datasets using a **Star Schema**.
+
+## Dimension Tables
+
+* Dim Customer
+* Dim Product
+* Dim Store
+
+## Fact Table
+
+* Fact Sales
+
+The Fact Sales table contains business measures such as:
+
+* Quantity Sold
+* Unit Price
+* Gross Sales
+* Discount Amount
+* Net Sales
+
+---
+
+# ⭐ Star Schema
+
+```text
+                 FACT SALES
+                      │
+      ┌───────────────┼───────────────┐
+      │               │               │
+      ▼               ▼               ▼
+DIM CUSTOMER    DIM PRODUCT     DIM STORE
+```
+
+---
+
+# 📈 Data Engineering Concepts Demonstrated
+
+* ETL Pipeline Design
+* Medallion Architecture
+* Delta Lake
+* PySpark DataFrames
+* Data Validation
+* Data Cleaning
+* Data Standardization
+* Star Schema Design
+* Fact & Dimension Modeling
+* Modular ETL Framework
+* Reusable Data Transformation Functions
+
+---
+
+# ▶️ How to Run
+
+### 1. Clone the repository
+
+```bash
+git clone <repository-url>
+cd enterprise-retail-lakehouse
+```
+
+### 2. Create a virtual environment
+
+```bash
+python -m venv venv
+```
+
+### 3. Activate the virtual environment
+
+**macOS / Linux**
+
+```bash
+source venv/bin/activate
+```
+
+**Windows**
+
+```bash
+venv\Scripts\activate
+```
+
+### 4. Install dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+### 5. Generate source data
+
+Run each generator:
+
+```bash
+python -m src.generators.customer_generator
+python -m src.generators.product_generator
+python -m src.generators.store_generator
+python -m src.generators.order_generator
+python -m src.generators.order_items_generator
+python -m src.generators.inventory_generator
+python -m src.generators.returns_generator
+```
+
+### 6. Load the Bronze Layer
+
+```bash
+python -m src.bronze.load_bronze
+```
+
+### 7. Load the Silver Layer
+
+```bash
+python -m src.silver.load_silver
+```
+
+### 8. Load the Gold Layer
+
+```bash
+python -m src.gold.load_gold
+```
+
+---
+
+# 📁 Final Data Flow
+
+```text
+CSV Files
+    │
+    ▼
+Bronze Layer
+    │
+    ▼
+Silver Layer
+    │
+    ▼
+Gold Layer
+    │
+    ▼
+Analytics
+```
+
+---
+
+# 🚀 Version 1 Highlights
+
+* Simulated enterprise retail source systems
+* Built reusable Bronze ingestion framework
+* Implemented modular Silver transformation framework
+* Applied business validation rules
+* Designed a Star Schema for analytics
+* Calculated business metrics within the Gold layer
+* Used Delta Lake for storage across all layers
+
+---
+
+# 👨‍💻 Author
+
+**Akshay G N**
+
+If you found this project interesting, feel free to connect or provide feedback. Contributions, suggestions, and improvements are always welcome.

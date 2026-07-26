@@ -1,0 +1,21 @@
+
+NUM_CUSTOMERS = 1000
+NUM_PRODUCTS = 500
+NUM_STORES = 20
+NUM_ORDERS = 10000
+
+RETURN_RATE = 0.05
+
+
+
+SOURCE_DATA_PATH = "data/source"
+
+
+
+RANDOM_SEED = 42
+
+TEXT_STANDARDIZATION_EXCLUDED_COLUMNS = [
+    "email",
+    "phone",
+    "source_system"
+]
