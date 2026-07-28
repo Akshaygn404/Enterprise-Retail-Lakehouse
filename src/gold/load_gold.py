@@ -1,89 +1,170 @@
 from src.common.spark_session import create_spark_session
 
+from src.common.logger import get_logger
+
+from src.common.metadata import (
+    generate_batch_id,
+    add_metadata_columns
+)
+
 from src.gold.gold_transform import (
     TABLE_BUILDERS,
     build_fact_sales
 )
+from src.common.postgres import write_to_postgres
 
-spark = create_spark_session()
 
 SOURCE_TABLES = {
+
     "dim_customer": "customers",
+
     "dim_product": "products",
+
     "dim_store": "stores"
+
 }
 
-for gold_table, builder in TABLE_BUILDERS.items():
 
-    print(f"\nBuilding {gold_table}...")
+def main():
 
-    silver_table = SOURCE_TABLES[gold_table]
+    logger = get_logger("Gold")
 
-    silver_df = (
+    logger.info("Gold Job Started")
 
-        spark.read
+    spark = create_spark_session()
 
-        .format("delta")
+    batch_id = generate_batch_id()
 
-        .load(f"data/silver/{silver_table}")
+    logger.info(f"Batch ID: {batch_id}")
 
-    )
+    try:
 
-    gold_df = builder(silver_df)
+        for gold_table, builder in TABLE_BUILDERS.items():
 
-    (
+            logger.info(f"Building {gold_table}...")
 
-        gold_df.write
+            silver_table = SOURCE_TABLES[gold_table]
 
-        .format("delta")
+            silver_df = (
 
-        .mode("overwrite")
+                spark.read
 
-        .save(f"data/gold/{gold_table}")
+                .format("delta")
 
-    )
+                .load(
 
-    print(f"{gold_table} completed.")
+                    f"data/silver/{silver_table}"
 
-orders_df = (
+                )
 
-    spark.read
+            )
 
-    .format("delta")
+            gold_df = builder(silver_df)
 
-    .load("data/silver/orders")
+            gold_df = add_metadata_columns(
+                gold_df,
+                batch_id
+            )
 
-)
+            (
 
-order_items_df = (
+                gold_df.write
 
-    spark.read
+                .format("delta")
 
-    .format("delta")
+                .mode("overwrite")
 
-    .load("data/silver/order_items")
+                .save(
 
-)
+                    f"data/gold/{gold_table}"
 
-fact_sales = build_fact_sales(
-    orders_df,
-    order_items_df
-)
+                )
 
-(
+            )
+            write_to_postgres(
+                gold_df,
+                gold_table
+            )
 
-    fact_sales.write
+            logger.info(f"{gold_table} completed.")
 
-    .format("delta")
+        logger.info("Building fact_sales...")
 
-    .mode("overwrite")
+        orders_df = (
 
-    .save("data/gold/fact_sales")
+            spark.read
 
-)
+            .format("delta")
 
-print("fact_sales completed.")
+            .load(
 
-spark.stop()
+                "data/silver/orders"
 
-print("\nGold Build Job Completed.")
+            )
+
+        )
+
+        order_items_df = (
+
+            spark.read
+
+            .format("delta")
+
+            .load(
+
+                "data/silver/order_items"
+
+            )
+
+        )
+
+        fact_sales = build_fact_sales(
+            orders_df,
+            order_items_df
+        )
+
+        fact_sales = add_metadata_columns(
+            fact_sales,
+            batch_id
+        )
+
+        (
+
+            fact_sales.write
+
+            .format("delta")
+
+            .mode("overwrite")
+
+            .save(
+
+                "data/gold/fact_sales"
+
+            )
+
+        )
+        write_to_postgres(
+            fact_sales,
+            "fact_sales"
+        )
+
+        logger.info("fact_sales completed.")
+
+        logger.info("Gold Job Completed Successfully.")
+
+    except Exception as e:
+
+        logger.error(f"Gold Job Failed: {e}")
+
+        raise
+
+    finally:
+
+        spark.stop()
+
+        logger.info("Spark Session Stopped.")
+
+
+if __name__ == "__main__":
+
+    main()

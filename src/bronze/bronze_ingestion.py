@@ -1,10 +1,10 @@
 from src.config.config import SOURCE_DATA_PATH
+from src.common.metadata import add_metadata_columns
 
 
-def load_to_bronze(spark, table_name):
+def load_to_bronze(spark, table_name, batch_id):
 
     source_file = f"{SOURCE_DATA_PATH}/{table_name}.csv"
-
     bronze_path = f"data/bronze/{table_name}"
 
     print(f"\n{'=' * 60}")
@@ -18,9 +18,12 @@ def load_to_bronze(spark, table_name):
         .csv(source_file)
     )
 
-    print(f"Total Records : {df.count()}")
+    df = add_metadata_columns(
+        df,
+        batch_id
+    )
 
-    df.printSchema()
+    print(f"Total Records : {df.count()}")
 
     (
         df.write
@@ -29,4 +32,4 @@ def load_to_bronze(spark, table_name):
         .save(bronze_path)
     )
 
-    print(f"✓ {table_name} loaded successfully.")
+    print(f"{table_name} loaded successfully.")
