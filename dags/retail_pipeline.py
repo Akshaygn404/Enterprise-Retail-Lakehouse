@@ -4,9 +4,7 @@ from airflow import DAG
 from airflow.operators.empty import EmptyOperator
 from airflow.operators.bash import BashOperator
 
-# ---------------------------------------------------------
-# Default Arguments
-# ---------------------------------------------------------
+
 
 default_args = {
     "owner": "Akshay",
@@ -15,9 +13,7 @@ default_args = {
     "retry_delay": timedelta(minutes=2),
 }
 
-# ---------------------------------------------------------
-# DAG Definition
-# ---------------------------------------------------------
+
 
 with DAG(
     dag_id="enterprise_retail_pipeline",
@@ -29,17 +25,12 @@ with DAG(
     tags=["Retail", "Spark", "Delta", "PostgreSQL"],
 ) as dag:
 
-    # ---------------------------------------------------------
-    # Start
-    # ---------------------------------------------------------
+
 
     start = EmptyOperator(
         task_id="start_pipeline"
     )
 
-    # ---------------------------------------------------------
-    # Bronze Layer
-    # ---------------------------------------------------------
 
     bronze_ingestion = BashOperator(
         task_id="bronze_ingestion",
@@ -50,10 +41,7 @@ with DAG(
         """
     )
 
-    # ---------------------------------------------------------
-    # Silver Layer
-    # ---------------------------------------------------------
-
+  
     silver_transformation = BashOperator(
         task_id="silver_transformation",
         bash_command="""
@@ -63,9 +51,7 @@ with DAG(
         """
     )
 
-    # ---------------------------------------------------------
-    # Gold Layer
-    # ---------------------------------------------------------
+  
 
     gold_data_warehouse = BashOperator(
         task_id="gold_data_warehouse",
@@ -76,17 +62,13 @@ with DAG(
         """
     )
 
-    # ---------------------------------------------------------
-    # End
-    # ---------------------------------------------------------
+
 
     end = EmptyOperator(
         task_id="pipeline_completed"
     )
 
-    # ---------------------------------------------------------
-    # Pipeline Flow
-    # ---------------------------------------------------------
+  
 
     (
         start

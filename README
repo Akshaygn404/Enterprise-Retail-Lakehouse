@@ -1,337 +1,303 @@
-# 🚀 Enterprise Retail Lakehouse Platform
+# Enterprise Retail Lakehouse
 
-An end-to-end **Data Engineering** project that simulates a modern retail data platform using **PySpark**, **Delta Lake**, and the **Medallion Architecture (Bronze → Silver → Gold)**.
+An end-to-end Data Engineering project that demonstrates the design and implementation of a modern Lakehouse architecture using PySpark, Delta Lake, Apache Airflow, PostgreSQL, and Power BI.
 
-The project demonstrates how raw operational data can be transformed into analytics-ready datasets using scalable ETL pipelines and dimensional data modeling.
-
----
-
-## 📌 Project Overview
-
-Retail businesses generate data from multiple operational systems such as customer management, product catalogs, inventory systems, and order management systems.
-
-This project simulates those source systems and builds a complete **Lakehouse ETL pipeline** that:
-
-* Generates realistic retail datasets
-* Ingests raw data into a Bronze Layer
-* Cleans and validates data in a Silver Layer
-* Builds analytical Star Schema tables in the Gold Layer
-
-The final datasets are designed to support reporting and business intelligence tools.
+The project processes retail sales data through a Medallion Architecture (Bronze → Silver → Gold), automates the ETL pipeline using Apache Airflow, stores analytics-ready data in PostgreSQL, and visualizes business insights using Power BI.
 
 ---
 
-# 🏗️ Architecture
+## Architecture
 
-```text
-                Source Systems
-                       │
-                       ▼
-             Generated CSV Files
-                       │
-                       ▼
-            Bronze Layer (Delta Lake)
-             Raw Data Ingestion
-                       │
-                       ▼
-           Silver Layer (Delta Lake)
-      Data Cleaning & Validation
-                       │
-                       ▼
-            Gold Layer (Delta Lake)
-        Star Schema & Business Metrics
-                       │
-                       ▼
-          Analytics / Data Warehouse
+```
+                        Raw Retail CSV Files
+                                │
+                                ▼
+                    Bronze Layer (Delta Lake)
+                 Raw Data Ingestion + Metadata
+                                │
+                                ▼
+                   Silver Layer (Delta Lake)
+             Data Cleaning & Business Transformations
+                                │
+                                ▼
+                    Gold Layer (Delta Lake)
+             Star Schema (Dimensions + Fact Table)
+                                │
+                                ▼
+                 PostgreSQL Data Warehouse
+                                │
+                                ▼
+                      Power BI Dashboard
+                                │
+                                ▼
+                    Business Insights & Analytics
 ```
 
----
-
-# 🛠️ Tech Stack
-
-| Category               | Technologies     |
-| ---------------------- | ---------------- |
-| Programming Language   | Python           |
-| Distributed Processing | PySpark          |
-| Storage Format         | Delta Lake       |
-| Data Processing        | Spark DataFrames |
-| Data Generation        | Faker, Pandas    |
-| Data Modeling          | Star Schema      |
-| Version Control        | Git, GitHub      |
+The entire pipeline is orchestrated using **Apache Airflow**.
 
 ---
 
-# 📂 Project Structure
+# Tech Stack
 
-```text
-enterprise-retail-lakehouse/
+| Category | Technologies |
+|-----------|-------------|
+| Programming | Python |
+| Data Processing | PySpark |
+| Storage | Delta Lake |
+| Workflow Orchestration | Apache Airflow |
+| Data Warehouse | PostgreSQL |
+| Data Visualization | Power BI |
+| File Format | CSV |
+| Version Control | Git & GitHub |
 
+---
+
+# Features
+
+- End-to-End ETL Pipeline
+- Medallion Architecture (Bronze, Silver, Gold)
+- Delta Lake Storage
+- Metadata Tracking
+- Automated Workflow using Apache Airflow
+- PostgreSQL Data Warehouse
+- Star Schema Data Model
+- Power BI Business Dashboard
+- Modular Project Structure
+- Production-style Logging
+
+---
+
+# Project Structure
+
+```
+enterprise-retail-lakehouse
+│
+├── dags/
+│   └── retail_pipeline.py
+│
 ├── data/
-│   ├── source/
+│   ├── raw/
 │   ├── bronze/
 │   ├── silver/
 │   └── gold/
 │
+├── jars/
+│
 ├── src/
-│
-│   ├── generators/
-│   │   ├── customer_generator.py
-│   │   ├── product_generator.py
-│   │   ├── store_generator.py
-│   │   ├── order_generator.py
-│   │   ├── order_items_generator.py
-│   │   ├── inventory_generator.py
-│   │   └── returns_generator.py
-│
 │   ├── bronze/
-│   │   ├── bronze_ingestion.py
-│   │   └── load_bronze.py
-│
 │   ├── silver/
-│   │   ├── common_transformations.py
-│   │   ├── silver_transform.py
-│   │   └── load_silver.py
-│
 │   ├── gold/
-│   │   ├── gold_transform.py
-│   │   └── load_gold.py
-│
 │   ├── common/
-│   │   └── spark_session.py
-│
-│   └── config/
-│       └── config.py
+│   ├── config/
+│   └── logging/
 │
 ├── requirements.txt
-└── README.md
+├── README.md
+└── .gitignore
 ```
 
 ---
 
-# 📊 Source Systems
+# Data Pipeline
 
-The project simulates seven operational retail systems.
+## Bronze Layer
 
-| Dataset     | Description                |
-| ----------- | -------------------------- |
-| Customers   | Customer master data       |
-| Products    | Product catalog            |
-| Stores      | Store information          |
-| Orders      | Customer orders            |
-| Order Items | Products within each order |
-| Inventory   | Stock availability         |
-| Returns     | Returned orders            |
+Responsibilities
+
+- Ingest raw retail CSV files
+- Preserve original data
+- Add ingestion metadata
+- Store data in Delta Lake format
+
+Metadata captured
+
+- Batch ID
+- Pipeline Version
+- Source System
+- Ingestion Timestamp
 
 ---
 
-# 🥉 Bronze Layer
+## Silver Layer
 
-The Bronze Layer stores raw data exactly as received from the source systems.
+Responsibilities
 
-### Responsibilities
+- Data Cleaning
+- Data Type Conversion
+- Null Handling
+- Duplicate Removal
+- Standardization
+- Business Transformations
 
-* Read CSV files
-* Preserve raw data
-* Store data as Delta Tables
-* No transformations
-* No validation
+The Silver layer contains clean, validated, analytics-ready datasets.
 
-Output:
+---
 
-```text
-bronze/
-    customers/
-    products/
-    stores/
-    orders/
-    order_items/
-    inventory_stock/
-    returns/
+## Gold Layer
+
+Creates dimensional models for analytical reporting.
+
+### Dimension Tables
+
+- dim_customer
+- dim_product
+- dim_store
+
+### Fact Table
+
+- fact_sales
+
+The Gold layer follows a **Star Schema** for optimized analytical queries.
+
+---
+
+# Data Warehouse
+
+The Gold Layer is loaded into PostgreSQL.
+
+Warehouse Tables
+
+```
+dim_customer
+dim_product
+dim_store
+fact_sales
 ```
 
----
+Example Record Counts
 
-# 🥈 Silver Layer
-
-The Silver Layer cleans, standardizes, and validates the Bronze data.
-
-### Common Transformations
-
-* Remove duplicate records
-* Trim whitespace
-* Standardize text
-* Convert data types
-* Apply business validations
-* Log validation metrics
-
-### Business Validations
-
-Examples include:
-
-* Product price validation
-* Order status validation
-* Quantity validation
-* Inventory validation
-* Customer validation
+| Table | Records |
+|--------|---------|
+| Customers | 1,000 |
+| Products | 500 |
+| Stores | 20 |
+| Sales | 18,142 |
 
 ---
 
-# 🥇 Gold Layer
+# Workflow Orchestration
 
-The Gold Layer contains analytics-ready datasets using a **Star Schema**.
+Apache Airflow automates the complete ETL process.
 
-## Dimension Tables
+Pipeline Flow
 
-* Dim Customer
-* Dim Product
-* Dim Store
-
-## Fact Table
-
-* Fact Sales
-
-The Fact Sales table contains business measures such as:
-
-* Quantity Sold
-* Unit Price
-* Gross Sales
-* Discount Amount
-* Net Sales
-
----
-
-# ⭐ Star Schema
-
-```text
-                 FACT SALES
-                      │
-      ┌───────────────┼───────────────┐
-      │               │               │
-      ▼               ▼               ▼
-DIM CUSTOMER    DIM PRODUCT     DIM STORE
+```
+Start
+   │
+   ▼
+Bronze Ingestion
+   │
+   ▼
+Silver Transformation
+   │
+   ▼
+Gold Layer Creation
+   │
+   ▼
+Load to PostgreSQL
+   │
+   ▼
+End
 ```
 
----
+The DAG supports
 
-# 📈 Data Engineering Concepts Demonstrated
-
-* ETL Pipeline Design
-* Medallion Architecture
-* Delta Lake
-* PySpark DataFrames
-* Data Validation
-* Data Cleaning
-* Data Standardization
-* Star Schema Design
-* Fact & Dimension Modeling
-* Modular ETL Framework
-* Reusable Data Transformation Functions
+- Scheduled execution
+- Retry mechanism
+- Task dependency management
+- Pipeline monitoring
 
 ---
 
-# ▶️ How to Run
+# Power BI Dashboard
 
-### 1. Clone the repository
+The PostgreSQL warehouse is connected to Power BI to create business dashboards.
+
+Dashboard includes
+
+- Total Revenue
+- Total Orders
+- Sales Trend
+- Revenue by Store
+- Revenue by Category
+- Top Products
+- Customer Distribution
+- Membership Analysis
+
+---
+
+# Skills Demonstrated
+
+- Data Engineering
+- ETL Pipeline Development
+- PySpark
+- Delta Lake
+- Apache Airflow
+- PostgreSQL
+- Data Warehousing
+- Star Schema Modeling
+- Workflow Orchestration
+- Power BI
+- Data Modeling
+- Batch Processing
+
+---
+
+# Getting Started
+
+## Clone Repository
 
 ```bash
-git clone <repository-url>
-cd enterprise-retail-lakehouse
+git clone https://github.com/Akshaygn404/enterprise-retail-lakehouse.git
 ```
 
-### 2. Create a virtual environment
+---
 
-```bash
-python -m venv venv
-```
-
-### 3. Activate the virtual environment
-
-**macOS / Linux**
-
-```bash
-source venv/bin/activate
-```
-
-**Windows**
-
-```bash
-venv\Scripts\activate
-```
-
-### 4. Install dependencies
+## Install Dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 5. Generate source data
+---
 
-Run each generator:
+## Initialize Airflow
 
 ```bash
-python -m src.generators.customer_generator
-python -m src.generators.product_generator
-python -m src.generators.store_generator
-python -m src.generators.order_generator
-python -m src.generators.order_items_generator
-python -m src.generators.inventory_generator
-python -m src.generators.returns_generator
+export AIRFLOW_HOME=$(pwd)/airflow
+
+airflow db migrate
+
+airflow users create
+
+airflow scheduler
+
+airflow webserver
 ```
 
-### 6. Load the Bronze Layer
+---
+
+## Execute Pipeline
 
 ```bash
 python -m src.bronze.load_bronze
-```
 
-### 7. Load the Silver Layer
-
-```bash
 python -m src.silver.load_silver
-```
 
-### 8. Load the Gold Layer
-
-```bash
 python -m src.gold.load_gold
 ```
 
----
-
-# 📁 Final Data Flow
-
-```text
-CSV Files
-    │
-    ▼
-Bronze Layer
-    │
-    ▼
-Silver Layer
-    │
-    ▼
-Gold Layer
-    │
-    ▼
-Analytics
-```
+Or simply trigger the DAG from the Airflow UI.
 
 ---
 
-# 🚀 Version 1 Highlights
-
-* Simulated enterprise retail source systems
-* Built reusable Bronze ingestion framework
-* Implemented modular Silver transformation framework
-* Applied business validation rules
-* Designed a Star Schema for analytics
-* Calculated business metrics within the Gold layer
-* Used Delta Lake for storage across all layers
-
----
-
-# 👨‍💻 Author
+# Author
 
 **Akshay G N**
 
-If you found this project interesting, feel free to connect or provide feedback. Contributions, suggestions, and improvements are always welcome.
+B.Tech Computer Science and Engineering
+
+Aspiring Data Engineer
+
+GitHub: https://github.com/Akshaygn404
+LinkedIn: https://linkedin.com/in/akshay-gn-5b6932241
